@@ -42,6 +42,13 @@ export const dameDocsFiltro = async (ref, campo, valor) => {
   return querySnapshot.empty ? [] : querySnapshot.docs.map((doc) => doc.data());
 }
 
+export const borraDocsFiltro = async (ref, campo, valor) => {
+  const querySnapshot = await getDocs(query(collection(db, ref), where(campo, '==', valor)))
+  querySnapshot.forEach((doc) => {
+    deleteDoc(doc.ref)
+  })
+}
+
 
 //Obtenemos los documentos de las colecciones (Room/Devices) de manera dinámica
 export const giveCollection = (ref, callback) => onSnapshot(collection(db,ref), callback)

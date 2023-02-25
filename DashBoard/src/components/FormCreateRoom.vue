@@ -25,16 +25,9 @@ const createRoom = async () => {
     Name: nameRoom.value,
     Description: descriptionRoom.value,
   };
-  const rooms = await dameDocs("Rooms"); // Obtener todas las salas existentes
-  const roomNames = store.rooms.map((room) => room.Name); // Obtener los nombres de las salas existentes
-  if (roomNames.includes(newRoom.Name)) {
-    // Verificar si el nombre de la nueva sala ya existe
-    alert("El nombre de la sala ya existe. Por favor, elija otro nombre."); // Mostrar mensaje de error
-  } else {
     await anadir("Rooms", newRoom); // Crear la nueva sala en la base de datos
     nameRoom.value="",
     descriptionRoom.value=""
   }
-};
 
 </script>

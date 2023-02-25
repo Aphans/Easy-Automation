@@ -1,7 +1,7 @@
 <template>
-  <div class="flex justify-between items-center p-2 mb-2 bg-white rounded-md shadow" @click="infoDevice(device.id)">
+  <div class="flex justify-between items-center p-2 mb-2 bg-white rounded-md shadow">
     <div>
-      <p :class="{'text-green-500 font-medium active': device.Value === 'ON', 'text-red-500 font-medium inactive': device.Value === 'OFF'}">{{ device.Name }}</p>
+      <p  @click="infoDevice(device.id)" :class="{'text-green-500 font-medium active': device.Value === 'ON', 'text-red-500 font-medium inactive': device.Value === 'OFF'}">{{ device.Name }}</p>
       <p v-if="device.Type=== 'Sensor'">
         {{ device.Value }} º
       </p>
@@ -49,11 +49,7 @@ const updateDevice = async (deviceId) => {
   data.isActive = valueToUpdate === 'ON';
 };
 
-const deleteDevice = () => {
-  emits('deviceDeleted', props.device.id);
-};
-
-const infoDevice = (id) => window.open(`http://localhost:5176/${id}`, '_blank')
+const infoDevice = (id) => window.open(`http://localhost:5174/${id}`, '_blank')
 </script>
 
 <style scoped>

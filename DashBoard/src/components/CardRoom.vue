@@ -11,7 +11,7 @@
       <p class="text-gray-600 mb-4">{{ Description }}</p>
       <h3 class="text-lg font-semibold mb-2">Devices:</h3>
       <div class="grid grid-cols-1 gap-4">
-        <CardDevice v-for="device in devices" :key="device.id" :device="device" @deviceDeleted="deleteDevice"/>
+        <CardDevice v-for="dev in device" :key="dev.id" :device="dev"/>
         <button @click="createDevice=true" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow-md">
     <svg class="w-5 h-5 fill-current inline-block mr-2" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
       <path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm4 10a1 1 0 01-1 1h-3v3a1 1 0 01-2 0v-3H7a1 1 0 010-2h3V7a1 1 0 012 0v3h3a1 1 0 011 1z"/>
@@ -52,45 +52,33 @@
 import {ref} from 'vue'
 import CardDevice from "./CardDevice.vue";
 import ModalCreateDevice from './ModalCreateDevice.vue';
-import { borraDoc, dameDocsFiltro } from "@/API/firebase";
+import { borraDoc, dameDocsFiltro , borraDocsFiltro } from "@/API/firebase";
+import {storeRoom} from '../stores/room'
 
 const emits = defineEmits(['roomDeleted','deviceDeleted'])
 
-const hola =()=>{props.devices.forEach(function(device) {
-  console.log(device.id);
-})};
-
+const store = storeRoom()
 const props = defineProps({
   id: String,
   Name: String,
   Description: String,
-  devices: Array,
+  device:Object,
 });
 
 const showDeleteModal = ref(false);
 const createDevice = ref(false);
 
-const deleteRoom = async () => {
-  await borraDoc("Rooms", props.id);
-  emits("roomDeleted", props.id);
-};
 
 const deleteDevice = async (deviceId) => {
-  const newDevices = props.devices.filter((device) => device.id !== deviceId);
+  const newDevices = props.device.filter((device) => device.id !== deviceId);
   await borraDoc("Devices", deviceId);
-  props.devices.splice(0, props.devices.length, ...newDevices);
+  props.device.splice(0, props.device.length, ...newDevices);
 };
 
 
 const deleteRoomAndDevices = async () => {
-    const devicesToDelete = await dameDocsFiltro("Devices", "Room", props.Name);
-    devicesToDelete.forEach(async (device) => {
-      console.log(device.id)
-      await borraDoc("Devices", device.id);
-      emits("deviceDeleted", device.id);
-    });
-    await borraDoc("Rooms", props.id);
-    emits("roomDeleted", props.id);
+  borraDoc('Rooms', props.id)
+  borraDocsFiltro('Devices', 'Room', props.Name)
     showDeleteModal.value = false;
   }
 

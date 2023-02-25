@@ -6,7 +6,7 @@
         <div
           class="bg-blue-400 rounded-lg p-6 flex flex-col items-center justify-center text-white"
         >
-          <h3 class="text-2xl font-semibold">{{ store.rooms.length }}</h3>
+          <h3 class="text-2xl font-semibold">{{ rooms.length }}</h3>
           <p class="text-lg">Rooms</p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -49,14 +49,12 @@
     <FormCreateRoom />
     <div class="grid grid-cols-2 gap-6">
       <CardRoom
-        v-for="room in store.rooms"
+        v-for="room in rooms"
         :key="room.id"
         :id="room.id"
         :Name="room.Name"
         :Description="room.Description"
-        :devices="room.Devices"
-        @roomDeleted="deleteRooms"
-        @deviceDeleted="deleteDevices"
+        :device="room.Devices"
       >
       </CardRoom>
     </div>
@@ -74,8 +72,6 @@ import { giveCollection, borraDoc, anadir, dameDocs } from "@/API/firebase";
 
 const rooms = ref([]);
 
-//Se inicializa el store
-const store = storeRoom();
 
 //Se cargan las salas y los dispositivos
 onMounted(() => {
@@ -84,6 +80,7 @@ onMounted(() => {
 
 const loadRoomsAndDevices = async () => {
   await giveCollection("Rooms", (querySnapshot) => {
+    rooms.value=[]
     querySnapshot.forEach((doc) => {
       const room = {
         id: doc.id,
@@ -92,10 +89,11 @@ const loadRoomsAndDevices = async () => {
         Devices: [],
       };
 
-      store.addRoom(room);
+      rooms.value.push(room);
     });
   });
   await giveCollection("Devices", (querySnapshot) => {
+    resetDevices(rooms.value)
     querySnapshot.forEach((doc) => {
       const device = {
         id: doc.id,
@@ -104,47 +102,22 @@ const loadRoomsAndDevices = async () => {
         Type: doc.data().Type,
         Room: doc.data().Room,
       };
-      store.rooms.forEach((room) => {
+      rooms.value.forEach((room) => {
         //Se comprueba si la sala tiene el mismo nombre que el nombre de la sala
         //que tiene el dispositivo y se envia la lista donde tiene el mismo
         //nombre de sala que el dispositivo y el dispositivo a añadir
         if (room.Name === device.Room) {
-          store.addDevice(room.Devices, device);
+          room.Devices.push(device)
         }
       });
     });
   });
 };
-// Eliminar salas y dispositivos en el dashboard
-const deleteRooms = async (roomId) => {
-  // Borrar la sala de la base de datos
-  await borraDoc("Rooms", roomId);
 
-  // Filtrar la lista de salas para quitar la sala que acabas de borrar
-  const newRooms = store.rooms.filter((room) => room.id !== roomId);
-
-  // Actualizar el valor de rooms con el nuevo array filtrado
-  store.rooms = newRooms;
-};
-
-const deleteDevices = async (deviceId) => {
-  // Recorrer la lista de habitaciones para encontrar la habitación que contiene el dispositivo
-  for (let i = 0; i < store.rooms.length; i++) {
-    const room = store.rooms[i];
-    const index = room.Devices.findIndex((device) => device.id !== deviceId);
-    if (index === -1) {
-      // Si se encuentra el dispositivo, borrarlo de la lista de dispositivos de la habitación
-      room.Devices.splice(index, 1);
-      // Borrar el dispositivo de la base de datos
-      await borraDoc("Devices", deviceId);
-      // Salir del bucle una vez que se ha encontrado y eliminado el dispositivo
-      break;
-    }
-  }
-}
+const resetDevices = (rooms)=>{rooms.forEach((el)=>el.Devices=[])}
 
 const countDevices = computed(() => {
- return store.rooms.map((el)=>el.Devices)
+ return rooms.value.map((el)=>el.Devices)
                .reduce((acc,el)=>acc+=el.length,0);
 
 });
