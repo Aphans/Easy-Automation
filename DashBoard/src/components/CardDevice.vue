@@ -30,9 +30,8 @@
 
 <script setup>
 import { reactive } from "vue";
-import { actualizaFieldDoc } from "@/API/firebase";
+import { actualizaFieldDoc,borraDoc } from "@/API/firebase";
 
-const emits = defineEmits(['deviceDeleted']);
 
 const props = defineProps({
   device: Object,
@@ -47,6 +46,10 @@ const updateDevice = async (deviceId) => {
   const valueToUpdate = props.device.Value === 'ON' ? 'OFF' : 'ON';
   await actualizaFieldDoc("Devices", deviceId, { Value: valueToUpdate });
   data.isActive = valueToUpdate === 'ON';
+};
+
+const deleteDevice = async() => {
+  await borraDoc("Devices",props.device.id)
 };
 
 const infoDevice = (id) => window.open(`http://localhost:5174/${id}`, '_blank')

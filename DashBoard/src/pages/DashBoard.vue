@@ -63,10 +63,9 @@
 
 <script setup>
 import { ref, onMounted,computed } from "vue";
-import { storeRoom } from "../stores/room";
 import CardRoom from "../components/CardRoom.vue";
 import FormCreateRoom from "../components/FormCreateRoom.vue";
-import { giveCollection, borraDoc, anadir, dameDocs } from "@/API/firebase";
+import { giveCollection} from "@/API/firebase";
 
 //Se crea la constante rooms para almacenar las salas
 
@@ -91,8 +90,7 @@ const loadRoomsAndDevices = async () => {
 
       rooms.value.push(room);
     });
-  });
-  await giveCollection("Devices", (querySnapshot) => {
+  giveCollection("Devices", (querySnapshot) => {
     resetDevices(rooms.value)
     querySnapshot.forEach((doc) => {
       const device = {
@@ -112,7 +110,7 @@ const loadRoomsAndDevices = async () => {
       });
     });
   });
-};
+})}
 
 const resetDevices = (rooms)=>{rooms.forEach((el)=>el.Devices=[])}
 

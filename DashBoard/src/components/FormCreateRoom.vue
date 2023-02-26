@@ -13,12 +13,10 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-import {dameDocs,anadir} from '../API/firebase/'
-import { storeRoom } from '../stores/room';
+import {anadir} from '../API/firebase/'
 
 const nameRoom = ref("");
 const descriptionRoom = ref("");
-const store = storeRoom()
 
 const createRoom = async () => {
   const newRoom = {
