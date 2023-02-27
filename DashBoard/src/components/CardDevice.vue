@@ -1,26 +1,47 @@
 <template>
-  <div class="flex justify-between items-center p-2 mb-2 bg-white rounded-md shadow">
-    <div>
-      <p  @click="infoDevice(device.id)" :class="{'text-green-500 font-medium active': device.Value === 'ON', 'text-red-500 font-medium inactive': device.Value === 'OFF'}">{{ device.Name }}</p>
-      <p v-if="device.Type=== 'Sensor'">
-        {{ device.Value }} º
+  <div class="flex justify-between items-center p-4 mb-4 bg-white rounded-md shadow-md hover:shadow-lg transition duration-300">
+    <div class="flex items-center">
+      <p @click="infoDevice(device.id)"
+         :class="{
+          'text-green-500 font-medium active': device.Value === 'ON',
+          'text-red-500 font-medium inactive': device.Value === 'OFF'
+         }">
+        {{ device.Name }}
       </p>
+      <div class="ml-6 text-center">
+        <p v-if="device.Type === 'Sensor'" class="text-xl">
+          <span class="text-xl font-bold">
+            <i class="fas fa-thermometer-half"></i>
+            Temperature {{ device.Value }}º
+          </span>
+        </p>
+      </div>
     </div>
     <div v-if="device.Type === 'Executor'">
       <label :for="`toggle-${device.id}`" class="flex items-center cursor-pointer">
         <div class="relative">
           <input :id="`toggle-${device.id}`" type="checkbox" class="sr-only" :checked="device.Value === 'ON'" @change="updateDevice(device.id)">
           <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
-          <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition" :class="{ active: device.Value === 'ON' }"></div>
+          <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"
+               :class="{ active: device.Value === 'ON' }"></div>
         </div>
-        <div class="ml-3 font-medium" :class="{'text-green-700 active': device.Value === 'ON', 'text-red-700 inactive': device.Value === 'OFF'}">
-  {{ device.Value }}
-</div>
+        <div class="ml-3 font-medium text-lg"
+             :class="{
+              'text-green-700 active': device.Value === 'ON',
+              'text-red-700 inactive': device.Value === 'OFF'
+             }">
+          {{ device.Value }}
+        </div>
       </label>
     </div>
     <div>
-      <button class="delete-button" @click="deleteDevice" :class="{ 'bg-red-500': device.Value === 'OFF', 'bg-green-500': device.Value === 'ON' }">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <button class="delete-button rounded-full p-2"
+              @click="deleteDevice"
+              :class="{ 
+                'bg-red-500 hover:bg-red-600': device.Value === 'OFF',
+                'bg-green-500 hover:bg-green-600': device.Value === 'ON' 
+              }">
+        <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95 1.414-1.414z"/>
         </svg>
       </button>

@@ -120,4 +120,13 @@ const countDevices = computed(() => {
 
 });
 
+const deleteRoom = () => {
+  const roomIndex = rooms.value.indexOf(draggingRoom.value);
+  if (roomIndex > -1) {
+    rooms.value.splice(roomIndex, 1);
+  }
+  draggingRoom.value = null;
+};
+
+
 </script>
