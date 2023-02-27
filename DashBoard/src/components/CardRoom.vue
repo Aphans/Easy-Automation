@@ -13,7 +13,8 @@
           clip-rule="evenodd"
         />
       </svg>
-      <h2 class="text-white text-2xl">{{ Name }}</h2>
+      <h2 class="text-white text-2xl">{{ Name }} </h2>
+
     </div>
     <div class="p-6">
       <h3 class="text-lg font-semibold mb-2">Description:</h3>
