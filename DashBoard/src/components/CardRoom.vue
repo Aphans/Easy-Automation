@@ -1,20 +1,8 @@
 <template>
   <div class="bg-white rounded-lg shadow-md overflow-hidden">
     <div class="bg-gray-900 h-32 w-full flex items-center justify-center">
-      <svg
-        class="text-white w-8 h-8 mr-2"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M2 2a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V4a2 2 0 00-2-2H2zm0 2h16v8H2V4zm0 10v2a2 2 0 002 2h12a2 2 0 002-2v-2H2z"
-          clip-rule="evenodd"
-        />
-      </svg>
+    <iconRoom/>
       <h2 class="text-white text-2xl">{{ Name }} </h2>
-
     </div>
     <div class="p-6">
       <h3 class="text-lg font-semibold mb-2">Description:</h3>
@@ -94,6 +82,7 @@ import { ref } from "vue";
 import CardDevice from "./CardDevice.vue";
 import ModalCreateDevice from "./ModalCreateDevice.vue";
 import { borraDoc, borraDocsFiltro } from "@/API/firebase";
+import iconRoom from "../icons/iconRoom.vue";
 
 const props = defineProps({
   id: String,

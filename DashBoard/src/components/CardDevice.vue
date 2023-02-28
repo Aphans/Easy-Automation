@@ -41,9 +41,7 @@
                 'bg-red-500 hover:bg-red-600': device.Value === 'OFF',
                 'bg-green-500 hover:bg-green-600': device.Value === 'ON' 
               }">
-        <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95 1.414-1.414z"/>
-        </svg>
+        <iconDeleteDevice/>
       </button>
     </div>
   </div>
@@ -52,7 +50,7 @@
 <script setup>
 import { reactive } from "vue";
 import { actualizaFieldDoc,borraDoc } from "@/API/firebase";
-
+import iconDeleteDevice from "../icons/iconDeleteDevice.vue";
 
 const props = defineProps({
   device: Object,
