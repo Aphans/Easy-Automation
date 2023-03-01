@@ -42,6 +42,14 @@ export const dameDocsFiltro = async (ref, campo, valor) => {
   return querySnapshot.empty ? [] : querySnapshot.docs.map((doc) => doc.data());
 }
 
+// Actualiza los documentos filtrados por campo y valor con un objeto de datos nuevo
+export const actualizaDocsFiltro = async (ref, campo, valor, newData) => {
+  const querySnapshot = await getDocs(query(collection(db, ref), where(campo, "==", valor)))
+  querySnapshot.forEach((doc) => {
+    updateDoc(doc.ref, newData)
+  })
+}
+
 export const borraDocsFiltro = async (ref, campo, valor) => {
   const querySnapshot = await getDocs(query(collection(db, ref), where(campo, '==', valor)))
   querySnapshot.forEach((doc) => {

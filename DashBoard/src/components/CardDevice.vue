@@ -8,12 +8,12 @@
          }">
         {{ device.Name }}
       </p>
-      <div class="ml-6 text-center">
-        <p v-if="device.Type === 'Sensor'" class="text-xl">
-          <span class="text-xl font-bold">
+      <div class="ml-6 text-center flex items-center">
+        <p v-if="device.Type === 'Sensor'" class="text-xl flex items-center">
+          <span class="text-xl font-bold temperature-icon">
             <i class="fas fa-thermometer-half"></i>
-            Temperature {{ device.Value }}º
           </span>
+          <span class="ml-2">{{ device.Value }}º</span>
         </p>
       </div>
     </div>
@@ -21,9 +21,10 @@
       <label :for="`toggle-${device.id}`" class="flex items-center cursor-pointer">
         <div class="relative">
           <input :id="`toggle-${device.id}`" type="checkbox" class="sr-only" :checked="device.Value === 'ON'" @change="updateDevice(device.id)">
-          <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
-          <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"
+          <div class="w-12 h-6 bg-gray-300 rounded-full shadow-inner">
+            <div class="toggle-dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition"
                :class="{ active: device.Value === 'ON' }"></div>
+          </div>
         </div>
         <div class="ml-3 font-medium text-lg"
              :class="{
@@ -46,7 +47,6 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { reactive } from "vue";
 import { actualizaFieldDoc,borraDoc } from "@/API/firebase";
@@ -75,18 +75,18 @@ const infoDevice = (id) => window.open(`http://localhost:5174/${id}`, '_blank')
 </script>
 
 <style scoped>
-#toggle:checked + .block {
-  background-color: #48bb78;
-}
-#toggle:checked + .block + .dot {
-  transform: translateX(1.375rem);
-  background-color: #48bb78;
-}
-.dot {
+.toggle-dot {
   transition: transform 0.2s;
-  background-color: #f56565;
-  border: 2px solid #ccc;
+  background-color: #ff0000;
+  border: 2px solid #cccccc;
 }
+
+.toggle-dot.active {
+  background-color: #48bb78;
+  transform: translateX(1.375rem);
+  border: none;
+}
+
 .delete-button {
   border: none;
   background-color: #f56565;

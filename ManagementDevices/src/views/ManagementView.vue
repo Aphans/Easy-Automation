@@ -1,21 +1,27 @@
 <template>
-  <div v-if="deviceValue" class="device-container">
-    <div class="device-header">{{ deviceValue.Name }}</div>
-    <div class="device-body">
-      <div class="device-type">{{ deviceValue.Type }}</div>
-      <div class="device-room">{{ deviceValue.Room }}</div>
-      <div class="device-value">
+  <div v-if="deviceValue" class="device-container bg-white shadow-md rounded-lg">
+    <div class="device-header text-xl font-bold">{{ deviceValue.Name }}</div>
+    <div class="device-body flex justify-between items-center">
+      <div class="device-info flex flex-col">
+        <div class="device-type text-lg font-bold">{{ deviceValue.Type }}</div>
+        <div class="device-room text-gray-500">{{ deviceValue.Room }}</div>
+      </div>
+      <div class="device-value flex items-center">
         <template v-if="deviceValue.Type === 'Sensor'">
-          <input type="number" v-model="value" @change="updateDevice" />
+          <input type="number" v-model="value" @change="updateDevice" 
+            class="rounded-full border border-gray-400 py-1 px-3 text-sm mr-3 w-28 focus:outline-none focus:border-blue-500">
         </template>
         <template v-else-if="deviceValue.Type === 'Executor'">
-          <label class="switch">
-            <input type="checkbox" v-model="value" @change="updateDevice" />
-            <span class="slider round"></span>
-          </label>
+          <div class="device-executor flex items-center">
+            <label class="switch">
+              <input type="checkbox" v-model="value" @change="updateDevice" 
+                class="hidden">
+              <span class="slider round"></span>
+            </label>
+           </div>
         </template>
         <template v-else>
-          <div>{{ deviceValue.Value }}</div>
+          <div class="font-bold">{{ deviceValue.Value }}</div>
         </template>
       </div>
     </div>
@@ -52,42 +58,30 @@ const updateDevice = async () => {
 };
 
 </script>
+
 <style scoped>
 .device-container {
-  display: flex;
-  flex-direction: column;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  padding: 16px;
   width: 400px;
+  padding: 1.5rem;
+  background-color: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.5rem;
 }
 
 .device-header {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 16px;
-}
-
-.device-body {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-bottom: 1.5rem;
+  color: #4B5563;
 }
 
 .device-type {
-  font-size: 18px;
-  font-weight: bold;
-  margin-right: 16px;
+  margin-bottom: 0.5rem;
+  color: #6B7280;
 }
 
-.device-room {
-  font-size: 16px;
-  margin-right: 16px;
-}
-
-.device-value {
-  display: flex;
-  align-items: center;
+.device-value input[type="number"]::-webkit-inner-spin-button,
+.device-value input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .switch {
@@ -110,8 +104,7 @@ const updateDevice = async () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: 0.4s;
+  background-color: #D1D5DB;
   transition: 0.4s;
   border-radius: 34px;
 }
@@ -123,54 +116,33 @@ const updateDevice = async () => {
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
-  -webkit-transition: 0.4s;
+  background-color: #FFFFFF;
   transition: 0.4s;
   border-radius: 50%;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  background-color: #10B981;
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
 
-/* Added styling for executor value */
+.device-info,
 .device-executor {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.device-room {
+  color: #9CA3AF;
+}
+
+.device-value {
+  display: flex;
+  justify-content: center;
   align-items: center;
-  font-size: 16px;
-  margin-right: 16px;
-}
-
-.device-executor span {
-  margin-right: 8px;
-  font-weight: bold;
-}
-
-.device-executor .switch {
-  margin-right: 8px;
-}
-
-.device-executor .switch input:checked + .slider:before {
-  -webkit-transform: translateX(30px);
-  -ms-transform: translateX(30px);
-  transform: translateX(30px);
-}
-
-.device-executor .switch input:checked + .slider {
-  background-color: #4CAF50;
-}
-
-.device-executor .switch input:focus + .slider {
-  box-shadow: 0 0 1px #4CAF50;
 }
 </style>

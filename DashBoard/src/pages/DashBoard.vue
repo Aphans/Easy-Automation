@@ -28,6 +28,7 @@
         :Name="room.Name"
         :Description="room.Description"
         :device="room.Devices"
+        :rooms="rooms"
       >
       </CardRoom>
     </div>
