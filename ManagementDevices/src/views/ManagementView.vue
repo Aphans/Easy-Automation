@@ -16,7 +16,9 @@
             <label class="switch">
               <input type="checkbox" v-model="value" @change="updateDevice" 
                 class="hidden">
-              <span class="slider round"></span>
+              <span class="slider" :class="{ active: value }">
+                <i :class="{ 'far fa-lightbulb': value, 'fas fa-power-off': !value }"></i>
+              </span>
             </label>
            </div>
         </template>
@@ -29,7 +31,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { giveCollection, actualizaFieldDoc } from "../API/firebase";
 
@@ -46,6 +48,12 @@ onMounted(() => {
   });
 });
 
+watch(deviceValue, (newValue) => {
+  if (newValue.Type === "Executor") {
+    value.value = newValue.Value === "ON";
+  }
+});
+
 const updateDevice = async () => {
   let newValue = value.value;
   if (deviceValue.value.Type === "Executor") {
@@ -58,6 +66,7 @@ const updateDevice = async () => {
 };
 
 </script>
+
 
 <style scoped>
 .device-container {
@@ -144,5 +153,16 @@ input:checked + .slider:before {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* Nueva regla para el estado ON */
+input:checked + .slider:before:after {
+  content: 'ON';
+  position: absolute;
+  font-size: 10px;
+  color: white;
+  top: 2px;
+  left: 27px;
+  text-transform: uppercase;
 }
 </style>
